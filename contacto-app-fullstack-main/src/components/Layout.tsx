@@ -15,14 +15,14 @@ export const Layout = () => {
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-blue-600 text-white p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <h1 className="text-xl font-bold">Sistema de Contactos</h1>
+          <h1 className="text-xl font-bold">Sistema de Gestion de Tareas</h1>
 
           <div className="flex gap-6 items-center">
             <Link to="/contacto" className="hover:text-blue-300 transition">
               Contactos
             </Link>
             <Link to="/mensajes" className="hover:text-blue-300 transition">
-              Mensajes
+              Tareas
             </Link>
           </div>
 

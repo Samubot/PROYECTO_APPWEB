@@ -30,13 +30,13 @@ export const ModalMensaje = ({ onClose, mensaje }: Props) => {
     try {
       if (mensaje) {
         await actualizarMensaje(mensaje.id, data.contenido);
-        toast.success("Mensaje actualizado", {
+        toast.success("Tarea actualizada", {
           position: "top-right",
           autoClose: 2000,
         });
       } else {
         await crearMensaje(data.contenido);
-        toast.success("Mensaje creado", {
+        toast.success("Tarea creada", {
           position: "top-right",
           autoClose: 2000,
         });
@@ -44,22 +44,22 @@ export const ModalMensaje = ({ onClose, mensaje }: Props) => {
       reset();
       onClose();
     } catch (err) {
-      toast.error("Error al guardar el mensaje");
+      toast.error("Error al guardar la tarea");
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
-        <h3 className="text-lg font-bold mb-4">Agregar mensaje</h3>
+        <h3 className="text-lg font-bold mb-4">Agregar tarea</h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <textarea
               rows={4}
               className="w-full border px-3 py-2 rounded-xl"
-              placeholder="Escribe tu mensaje"
-              {...register("contenido", { required: "Mensaje obligatorio" })}
+              placeholder="Escribe la tarea a realizar"
+              {...register("contenido", { required: "Escribe una tarea" })}
             ></textarea>
             {errors.contenido && (
               <p className="text-red-500">{errors.contenido.message}</p>

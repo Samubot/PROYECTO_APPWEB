@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 let mensajes = [
-  { id: 1, contenido: 'Mensaje de prueba 1' },
-  { id: 2, contenido: 'Mensaje de prueba 2' },
+  { id: 1, contenido: 'Tarea de prueba 1' },
+  { id: 2, contenido: 'Tarea de prueba 2' },
 ];
 
 // Obtener todos los mensajes
@@ -30,7 +30,7 @@ router.put("/:id", (req, res) => {
   const { contenido } = req.body;
 
   const index = mensajes.findIndex(m => m.id === id);
-  if (index === -1) return res.status(404).json({ error: "Mensaje no encontrado" });
+  if (index === -1) return res.status(404).json({ error: "Tarea no encontrada" });
 
   mensajes[index].contenido = contenido;
   res.json(mensajes[index]);
@@ -41,7 +41,7 @@ router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
   const index = mensajes.findIndex(m => m.id === id);
-  if (index === -1) return res.status(404).json({ error: "Mensaje no encontrado" });
+  if (index === -1) return res.status(404).json({ error: "Tarea no encontrada" });
 
   const mensajeEliminado = mensajes.splice(index, 1);
   res.json(mensajeEliminado[0]);

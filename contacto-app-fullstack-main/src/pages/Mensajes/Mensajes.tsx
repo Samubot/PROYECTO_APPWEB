@@ -16,7 +16,7 @@ export const Mensajes = () => {
       const data = await obtenerMensajes();
       setMensajes(data);
     } catch (error) {
-      console.error("Error al obtener los mensajes:", error);
+      console.error("Error al obtener las tareas:", error);
     }
   };
 
@@ -46,7 +46,7 @@ export const Mensajes = () => {
 
     if (result.isConfirmed) {
       await eliminarMensaje(id);
-      toast.success("Mensaje eliminado", {
+      toast.success("Tarea eliminada", {
         position: "top-right",
         autoClose: 1000,
       });
@@ -78,7 +78,7 @@ export const Mensajes = () => {
           <thead>
             <tr className="bg-gray-100">
               <th className="text-left px-4 py-2">ID</th>
-              <th className="text-left px-4 py-2">Contenido</th>
+              <th className="text-left px-4 py-2">Nombre de la tarea</th>
               <th className="p-2 text-center">Acciones</th>
             </tr>
           </thead>
