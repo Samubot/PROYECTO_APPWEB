@@ -1,41 +1,41 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { actualizarMensaje, crearMensaje } from "./mensajes.service";
+import { actualizarTarea, crearTarea } from "./tareas.service";
 
 interface Props {
   onClose: () => void;
-  mensaje?: {
+  tarea?: {
     id: number;
     contenido: string;
   };
 }
 
-interface MensajeForm {
+interface TareaForm {
   contenido: string;
 }
 
-export const ModalMensaje = ({ onClose, mensaje }: Props) => {
+export const ModalTarea = ({ onClose, tarea }: Props) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<MensajeForm>({
+  } = useForm<TareaForm>({
     defaultValues: {
-      contenido: mensaje?.contenido || "",
+      contenido: tarea?.contenido || "",
     },
   });
 
-  const onSubmit = async (data: MensajeForm) => {
+  const onSubmit = async (data: TareaForm) => {
     try {
-      if (mensaje) {
-        await actualizarMensaje(mensaje.id, data.contenido);
+      if (tarea) {
+        await actualizarTarea(tarea.id, data.contenido);
         toast.success("Tarea actualizada", {
           position: "top-right",
           autoClose: 2000,
         });
       } else {
-        await crearMensaje(data.contenido);
+        await crearTarea(data.contenido);
         toast.success("Tarea creada", {
           position: "top-right",
           autoClose: 2000,

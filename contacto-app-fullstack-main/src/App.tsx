@@ -9,7 +9,7 @@ import { PrivateRoute } from "./routes/PrivateRoutes";
 import { Login } from "./pages/Login/Login";
 import { Contacto } from "./pages/Contacto/Contacto";
 import { Layout } from "./components/Layout";
-import { Mensajes } from "./pages/Mensajes/Mensajes";
+import { Tareas } from "./pages/Tareas/Tareas.tsx";
 
 function App() {
   return (
@@ -26,9 +26,9 @@ function App() {
               </PrivateRoute>
             }
           >
-            <Route index element={<Navigate to="/mensajes" />} />
+            <Route index element={<Navigate to="/tareas" />} />
             <Route path="/contacto" element={<Contacto />} />
-            <Route path="/mensajes" element={<Mensajes />} />
+            <Route path="/tareas" element={<Tareas />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" />} />

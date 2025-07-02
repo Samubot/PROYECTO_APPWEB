@@ -1,50 +1,50 @@
 const express = require('express');
 const router = express.Router();
 
-let mensajes = [
+let tareas = [
   { id: 1, contenido: 'Tarea de prueba 1' },
   { id: 2, contenido: 'Tarea de prueba 2' },
 ];
 
-// Obtener todos los mensajes
+// Obtener todas las tareas
 router.get('/', (req, res) => {
-  res.json(mensajes);
+  res.json(tareas);
 });
 
-// Crear un nuevo mensaje
+// Crear una nueva tarea
 router.post('/', (req, res) => {
   const { contenido } = req.body;
 
-  const nuevo = {
-    id: mensajes.length + 1,
+  const nueva = {
+    id: tareas.length + 1,
     contenido,
   };
 
-  mensajes.push(nuevo);
-  res.status(201).json(nuevo);
+  tareas.push(nueva);
+  res.status(201).json(nueva);
 });
 
-// Actualizar mensaje por ID
+// Actualizar tarea por ID
 router.put("/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const { contenido } = req.body;
 
-  const index = mensajes.findIndex(m => m.id === id);
+  const index = tareas.findIndex(t => t.id === id);
   if (index === -1) return res.status(404).json({ error: "Tarea no encontrada" });
 
-  mensajes[index].contenido = contenido;
-  res.json(mensajes[index]);
+  tareas[index].contenido = contenido;
+  res.json(tareas[index]);
 });
 
-// Eliminar mensaje por ID
+// Eliminar tarea por ID
 router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
-  const index = mensajes.findIndex(m => m.id === id);
+  const index = tareas.findIndex(t => t.id === id);
   if (index === -1) return res.status(404).json({ error: "Tarea no encontrada" });
 
-  const mensajeEliminado = mensajes.splice(index, 1);
-  res.json(mensajeEliminado[0]);
+  const tareaEliminada = tareas.splice(index, 1);
+  res.json(tareaEliminada[0]);
 });
 
 module.exports = router;

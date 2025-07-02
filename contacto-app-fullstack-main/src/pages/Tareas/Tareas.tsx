@@ -1,34 +1,34 @@
 import { useEffect, useState } from "react";
 import { FiEdit, FiPlus, FiTrash2 } from "react-icons/fi";
-import { ModalMensaje } from "./ModalMensajes";
-import type { Mensaje } from "./mensajes.types";
-import { eliminarMensaje, obtenerMensajes } from "./mensajes.service";
+import { ModalTarea } from "./ModalTareas";
+import type { Tarea } from "./tareas.types";
+import { eliminarTarea, obtenerTareas } from "./tareas.service";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 
-export const Mensajes = () => {
-  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
+export const Tareas = () => {
+  const [tareas, setTareas] = useState<Tarea[]>([]);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const [mensajeEditando, setMensajeEditando] = useState<Mensaje | undefined>();
+  const [tareaEditando, setTareaEditando] = useState<Tarea | undefined>();
 
-  const cargarMensajes = async () => {
+  const cargarTareas = async () => {
     try {
-      const data = await obtenerMensajes();
-      setMensajes(data);
+      const data = await obtenerTareas();
+      setTareas(data);
     } catch (error) {
       console.error("Error al obtener las tareas:", error);
     }
   };
 
-  const abrirModal = (mensaje?: Mensaje) => {
-    setMensajeEditando(mensaje);
+  const abrirModal = (tarea?: Tarea) => {
+    setTareaEditando(tarea);
     setMostrarModal(true);
   };
 
   const cerrarModal = () => {
-    setMensajeEditando(undefined);
+    setTareaEditando(undefined);
     setMostrarModal(false);
-    cargarMensajes();
+    cargarTareas();
   };
 
   const confirmarEliminacion = async (id: number) => {
@@ -45,24 +45,24 @@ export const Mensajes = () => {
     });
 
     if (result.isConfirmed) {
-      await eliminarMensaje(id);
+      await eliminarTarea(id);
       toast.success("Tarea eliminada", {
         position: "top-right",
         autoClose: 1000,
       });
-      cargarMensajes();
+      cargarTareas();
     }
   };
 
   useEffect(() => {
-    cargarMensajes();
+    cargarTareas();
   }, []);
 
   return (
     <div className="max-w-4xl mx-auto px-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
-          Mensajes
+          Tareas
         </h2>
         <button
           onClick={() => abrirModal()}
@@ -83,19 +83,19 @@ export const Mensajes = () => {
             </tr>
           </thead>
           <tbody>
-            {mensajes.map((m) => (
-              <tr key={m.id} className="border-t border-gray-200">
-                <td className="px-4 py-2">{m.id}</td>
-                <td className="px-4 py-2">{m.contenido}</td>
+            {tareas.map((t) => (
+              <tr key={t.id} className="border-t border-gray-200">
+                <td className="px-4 py-2">{t.id}</td>
+                <td className="px-4 py-2">{t.contenido}</td>
                 <td className="p-2 flex justify-center gap-3">
                   <button
-                    onClick={() => abrirModal(m)}
+                    onClick={() => abrirModal(t)}
                     className="text-blue-600 hover:text-blue-800"
                   >
                     <FiEdit />
                   </button>
                   <button
-                    onClick={() => confirmarEliminacion(m.id)}
+                    onClick={() => confirmarEliminacion(t.id)}
                     className="text-red-600 hover:text-red-800"
                   >
                     <FiTrash2 />
@@ -108,9 +108,9 @@ export const Mensajes = () => {
       </div>
 
       {mostrarModal && (
-        <ModalMensaje
+        <ModalTarea
           onClose={cerrarModal}
-          mensaje={mensajeEditando ?? undefined}
+          tarea={tareaEditando ?? undefined}
         />
       )}
 
