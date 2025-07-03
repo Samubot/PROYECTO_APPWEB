@@ -8,13 +8,13 @@ export const obtenerTareas = async (): Promise<Tarea[]> => {
   return res.data;
 };
 
-export const crearTarea = async (contenido: string): Promise<Tarea> => {
-  const res = await axios.post(`${API_URL}/tarea`, { contenido });
+export const crearTarea = async (tarea: Omit<Tarea, 'id' | 'completada'>): Promise<Tarea> => {
+  const res = await axios.post(`${API_URL}/tarea`, tarea);
   return res.data;
 };
 
-export const actualizarTarea = async (id: number, contenido: string) => {
-  const res = await axios.put(`${API_URL}/tarea/${id}`, { contenido });
+export const actualizarTarea = async (id: number, tarea: Partial<Tarea>) => {
+  const res = await axios.put(`${API_URL}/tarea/${id}`, tarea);
   return res.data;
 };
 

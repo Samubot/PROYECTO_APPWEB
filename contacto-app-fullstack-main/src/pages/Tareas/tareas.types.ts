@@ -1,4 +1,8 @@
 export interface Tarea {
   id: number;
-  contenido: string;
+  nombre: string;
+  descripcion: string;
+  fechaInicio: string;
+  fechaFin: string;
+  completada: boolean;
 }
