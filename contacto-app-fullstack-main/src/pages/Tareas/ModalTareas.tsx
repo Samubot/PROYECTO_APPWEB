@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { toast } from "react-toastify";
 import { actualizarTarea, crearTarea } from "./tareas.service";
-import type { Tarea } from "./tareas.types";
+import type { Tarea, Actividad } from "./tareas.types";
 
 interface Props {
   onClose: () => void;
@@ -13,6 +13,7 @@ interface TareaForm {
   descripcion: string;
   fechaInicio: string;
   fechaFin: string;
+  actividades: Actividad[];
 }
 
 export const ModalTarea = ({ onClose, tarea }: Props) => {
@@ -20,6 +21,7 @@ export const ModalTarea = ({ onClose, tarea }: Props) => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<TareaForm>({
     defaultValues: {
@@ -27,13 +29,21 @@ export const ModalTarea = ({ onClose, tarea }: Props) => {
       descripcion: tarea?.descripcion || "",
       fechaInicio: tarea?.fechaInicio || "",
       fechaFin: tarea?.fechaFin || "",
+      actividades: tarea?.actividades?.length
+        ? tarea.actividades
+        : [{ nombre: "", tiempo: 0 }],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    name: "actividades",
+    control,
   });
 
   const onSubmit = async (data: TareaForm) => {
     try {
       if (tarea) {
-        await actualizarTarea(tarea.id, { ...data, completada: tarea.completada });
+        await actualizarTarea(tarea.id, { ...data, completada: tarea.completada, enEjecucion: tarea.enEjecucion });
         toast.success("Tarea actualizada", { position: "top-right", autoClose: 2000 });
       } else {
         await crearTarea(data);
@@ -48,7 +58,7 @@ export const ModalTarea = ({ onClose, tarea }: Props) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
         <h3 className="text-lg font-bold mb-4">{tarea ? "Editar tarea" : "Agregar tarea"}</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -66,25 +76,45 @@ export const ModalTarea = ({ onClose, tarea }: Props) => {
             ></textarea>
             {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
           </div>
-          <div className="flex gap-2">
-            <div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
               <label className="block text-xs">Fecha y hora inicio</label>
               <input
                 type="datetime-local"
-                className="border px-2 py-1 rounded-xl"
+                className="w-full border px-2 py-1 rounded-xl"
                 {...register("fechaInicio", { required: "Fecha de inicio requerida" })}
               />
               {errors.fechaInicio && <p className="text-red-500">{errors.fechaInicio.message}</p>}
             </div>
-            <div>
+            <div className="flex-1">
               <label className="block text-xs">Fecha y hora fin</label>
               <input
                 type="datetime-local"
-                className="border px-2 py-1 rounded-xl"
+                className="w-full border px-2 py-1 rounded-xl"
                 {...register("fechaFin", { required: "Fecha de fin requerida" })}
               />
               {errors.fechaFin && <p className="text-red-500">{errors.fechaFin.message}</p>}
             </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1">Actividades</label>
+            {fields.map((field, idx) => (
+              <div key={field.id} className="flex gap-2 mb-2">
+                <input
+                  className="border px-2 py-1 rounded-xl flex-1"
+                  placeholder="Nombre actividad"
+                  {...register(`actividades.${idx}.nombre` as const, { required: "Nombre requerido" })}
+                />
+                <input
+                  type="number"
+                  className="border px-2 py-1 rounded-xl w-24"
+                  placeholder="Minutos"
+                  {...register(`actividades.${idx}.tiempo` as const, { valueAsNumber: true, min: 1 })}
+                />
+                <button type="button" onClick={() => remove(idx)} className="text-red-600 font-bold">X</button>
+              </div>
+            ))}
+            <button type="button" onClick={() => append({ nombre: "", tiempo: 0 })} className="text-blue-600 mt-1">+ Agregar actividad</button>
           </div>
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">Cancelar</button>
